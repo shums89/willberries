@@ -4,6 +4,7 @@ const cart = function () {
   const closeBtn = cart.querySelector('.modal-close');
   const cartTable = cart.querySelector('.cart-table__goods');
   const modalForm = cart.querySelector('.modal-form');
+  const cardTableTotal = cart.querySelector('.card-table__total');
   const goodsContainer = document.querySelector('.long-goods-list');
 
   const deleteCartItem = id => {
@@ -67,9 +68,11 @@ const cart = function () {
 
   const renderCartGoods = goods => {
     cartTable.innerHTML = "";
+    priceTotal = 0;
 
     goods.forEach(good => {
       const tr = document.createElement('tr');
+
       tr.innerHTML = `
         <td>${good.name}</td>
         <td>${good.price}$</td>
@@ -91,7 +94,11 @@ const cart = function () {
           deleteCartItem(good.id);
         }
       });
+
+      priceTotal = priceTotal + (good.price * good.count);
     });
+
+    cardTableTotal.textContent = `${priceTotal}$`;
   };
 
   const sendForm = () => {
@@ -106,6 +113,7 @@ const cart = function () {
       })
     }).then(() => {
       cart.style.display = "";
+      localStorage.removeItem('cart');
     });
   };
 
